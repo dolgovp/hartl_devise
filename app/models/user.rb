@@ -1,13 +1,17 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
     has_many :microposts, dependent: :destroy
-    has_many :relationships,foreign_key: "follower_id",
+    has_many :active_relationships,foreign_key: "follower_id",class_name: "Relationship",
                                     dependent: :destroy
     has_many :passive_relationships, class_name: "Relationship",
                                     foreign_key: "followed_id",
                                     dependent: :destroy
-    has_many :following, through: :relationships, source: :followed
+    has_many :following, through: :active_relationships, source: :followed
     has_many :followers, through: :passive_relationships, source: :follower
-
+=begin
     attr_accessor :remember_token, :activation_token, :reset_token
     before_save   :downcase_email
     before_create :create_activation_digest
@@ -18,7 +22,7 @@ class User < ApplicationRecord
                 uniqueness: {case_sensetive: false}
     has_secure_password
     validates :password, presence: true, length: { minimum: 6}, allow_nil: true
-
+=end
     # Возвращает дайджест данной строки.
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :

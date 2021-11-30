@@ -1,0 +1,12 @@
+- provide(:title, 'Sign up')
+h1
+  | Sign up
+.row
+  .col-md-6.col-md-offset-3
+    = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+      = render "devise/shared/error_messages", resource: resource
+      = f.input :email, autofocus: true, autocomplete: "email"
+      = f.input :password, autocomplete: "new-password"
+      = f.input :password_confirmation, autocomplete: "new-password"
+      = f.button :submit
+    = render "devise/shared/links"
